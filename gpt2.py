@@ -107,6 +107,9 @@ class GPT(nn.Module):
         )
         self.lm_head = nn.Linear(config.n_embd, config.vocab_size, bias=False)
 
+        # tie token embedding weight with lm_head
+        self.lm_head.weight = self.transformer.wte.weight
+
     def forward(self, idx: torch.Tensor):
         b, t = idx.shape
         assert t <= self.config.n_ctx, "Number of tokens should not exceed block size"
