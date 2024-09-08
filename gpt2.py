@@ -45,7 +45,7 @@ class CausalSelfAttention(nn.Module):
         v = v.transpose(1, 2)  # b, n_head, t, head_size
 
         if hasattr(F, "scaled_dot_product_attention"):
-            attn = F.scaled_dot_product_attention(q, k, v, is_causal=True)
+            y = F.scaled_dot_product_attention(q, k, v, is_causal=True)
         else:
             attn = (q @ k.transpose(2, 3)) * (
                 1 / np.sqrt(k.shape[-1])
