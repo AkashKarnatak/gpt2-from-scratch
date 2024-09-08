@@ -1,7 +1,7 @@
+import math
 import torch
 from torch import nn
 import torch.nn.functional as F
-import numpy as np
 from dataclasses import dataclass
 from transformers import GPT2LMHeadModel
 
@@ -48,7 +48,7 @@ class CausalSelfAttention(nn.Module):
             y = F.scaled_dot_product_attention(q, k, v, is_causal=True)
         else:
             attn = (q @ k.transpose(2, 3)) * (
-                1 / np.sqrt(k.shape[-1])
+                1 / math.sqrt(k.shape[-1])
             )  # b, n_head, t, t
             attn = attn.masked_fill(
                 self.bias[:, :, :t, :t], float("-inf")
