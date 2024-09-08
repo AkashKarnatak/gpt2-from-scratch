@@ -7,7 +7,7 @@ from transformers import GPT2LMHeadModel
 
 
 @dataclass
-class GPTConfig:
+class GPT2Config:
     n_ctx: int = 1024  # max sequence length
     vocab_size: int = (
         50257  # 50,000 BPE merges + 256 bytes tokens + 1 <|endoftext|> token
@@ -18,7 +18,7 @@ class GPTConfig:
 
 
 class CausalSelfAttention(nn.Module):
-    def __init__(self, config: GPTConfig):
+    def __init__(self, config: GPT2Config):
         super().__init__()
 
         head_size = config.n_embd // config.n_head
@@ -92,7 +92,7 @@ class Block(nn.Module):
         return x
 
 
-class GPT(nn.Module):
+class GPT2Model(nn.Module):
     def __init__(self, config):
         super().__init__()
         self.config = config
@@ -133,13 +133,13 @@ class GPT(nn.Module):
             if len(v.shape) != 2:
                 continue
             state[k] = v.T
-        config = GPTConfig(
+        config = GPT2Config(
             n_ctx=hf_model.config.n_ctx,
             vocab_size=hf_model.config.vocab_size,
             n_layer=hf_model.config.n_layer,
             n_head=hf_model.config.n_head,
             n_embd=hf_model.config.n_embd,
         )
-        gpt = GPT(config)
+        gpt = GPT2Model(config)
         gpt.load_state_dict(state)
         return gpt
