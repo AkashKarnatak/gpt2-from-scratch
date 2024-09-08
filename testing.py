@@ -1,5 +1,5 @@
 import torch
-from gpt2 import GPT
+from gpt2 import GPT2Model
 from transformers import (
     GPT2Tokenizer,
     GPT2LMHeadModel,
@@ -9,7 +9,7 @@ from transformers import (
 tokenizer = GPT2Tokenizer.from_pretrained("gpt2")
 
 # load custom gpt2 model
-gpt = GPT.from_pretrained("gpt2")
+gpt = GPT2Model.from_pretrained("gpt2")
 # load gpt2 model from HF
 model = GPT2LMHeadModel.from_pretrained("gpt2")
 model.eval()
