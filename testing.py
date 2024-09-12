@@ -24,11 +24,9 @@ def test_gpt2():
     encoded_input = tokenizer(text, return_tensors="pt")
 
     hf_out = model(encoded_input["input_ids"]).logits
-    custom_out = gpt(encoded_input["input_ids"])
-    print("HF GPT2 output:\n", hf_out)
-    print("Custom GPT2 output:\n", custom_out)
+    out = gpt(encoded_input["input_ids"])
     assert (
-        torch.abs(hf_out - custom_out).max() < 1e-5
+        torch.abs(hf_out - out).max() < 1e-5
     ), "Sanity check for GPT2Model failed"
     print("Sanity check for GPT2Model passed")
 
@@ -50,8 +48,6 @@ def test_bert():
     hf_model_out = model(encoded_input["input_ids"])
     hf_out, hf_pool = hf_model_out.last_hidden_state, hf_model_out.pooler_output
     out, pool = bert(encoded_input["input_ids"])
-    print("HF GPT2 output:\n", hf_out)
-    print("Custom GPT2 output:\n", out)
     assert (
         torch.abs(hf_out - out).max() < 1e-5 and torch.abs(hf_pool - pool).max() < 1e-5
     ), "Sanity check for BertModel failed"
