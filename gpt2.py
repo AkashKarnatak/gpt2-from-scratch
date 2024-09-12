@@ -3,7 +3,6 @@ import torch
 from torch import nn
 import torch.nn.functional as F
 from dataclasses import dataclass
-from transformers import GPT2LMHeadModel
 
 
 @dataclass
@@ -125,6 +124,8 @@ class GPT2Model(nn.Module):
 
     @classmethod
     def from_pretrained(cls, model: str = "gpt2"):
+        from transformers import GPT2LMHeadModel
+
         hf_model = GPT2LMHeadModel.from_pretrained(model)
         state = hf_model.state_dict()
         for k, v in state.items():
