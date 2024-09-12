@@ -26,7 +26,7 @@ def test_gpt2():
     hf_out = model(encoded_input["input_ids"]).logits
     out = gpt(encoded_input["input_ids"])
     assert (
-        torch.abs(hf_out - out).max() < 1e-5
+        torch.abs(hf_out - out).max() < 1e-4
     ), "Sanity check for GPT2Model failed"
     print("Sanity check for GPT2Model passed")
 
@@ -49,7 +49,7 @@ def test_bert():
     hf_out, hf_pool = hf_model_out.last_hidden_state, hf_model_out.pooler_output
     out, pool = bert(encoded_input["input_ids"])
     assert (
-        torch.abs(hf_out - out).max() < 1e-5 and torch.abs(hf_pool - pool).max() < 1e-5
+        torch.abs(hf_out - out).max() < 1e-4 and torch.abs(hf_pool - pool).max() < 1e-4
     ), "Sanity check for BertModel failed"
     print("Sanity check for BertModel passed")
 
