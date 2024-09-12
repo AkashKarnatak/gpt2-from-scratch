@@ -1,5 +1,5 @@
-# GPT2 from scratch
-This repository contains the modeling code for GPT-2, enabling you to load its pre-trained weights and perform inference using the model.
+# Transformers from scratch
+This repository contains the modeling code for different transformer architectures, enabling you to load its pre-trained weights and perform inference using the model.
 
 # Requirements
 
