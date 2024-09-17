@@ -7,6 +7,8 @@ from transformers import (
     BertTokenizer,
     BertModel as BertModelHF,
 )
+from bert import PositionalEmbedding, BertConfig
+import matplotlib.pyplot as plt
 
 
 def test_gpt2():
@@ -25,9 +27,7 @@ def test_gpt2():
 
     hf_out = model(encoded_input["input_ids"]).logits
     out = gpt(encoded_input["input_ids"])
-    assert (
-        torch.abs(hf_out - out).max() < 1e-4
-    ), "Sanity check for GPT2Model failed"
+    assert torch.abs(hf_out - out).max() < 1e-4, "Sanity check for GPT2Model failed"
     print("Sanity check for GPT2Model passed")
 
 
@@ -54,5 +54,14 @@ def test_bert():
     print("Sanity check for BertModel passed")
 
 
+def test_pos_embd():
+    pos_emb = PositionalEmbedding(BertConfig())
+    a = pos_emb(torch.arange(2000))
+    print(a)
+    plt.imshow(a.numpy())
+    plt.show()
+
+
 test_gpt2()
 test_bert()
+# test_pos_embd()

@@ -111,6 +111,34 @@ class BertLayer(nn.Module):
         return x
 
 
+class PositionalEmbedding(nn.Module):
+    def __init__(self, config):
+        super().__init__()
+        assert config.n_embd % 2 == 0, "Embedding dimension should be even"
+        self.n_embd = config.n_embd
+        self.initialize(config.n_ctx)
+
+    def initialize(self, n_ctx):
+        # sin(pos / 10000 ** (2i / n_embd)) -> 2i
+        # cos(pos / 10000 ** (2i / n_embd)) -> 2i + 1
+        self.n_ctx = n_ctx
+        pos = torch.arange(n_ctx).view(-1, 1).float()  # n_ctx, 1
+        div = torch.exp(
+            -2
+            * torch.arange(self.n_embd / 2).float()
+            * (1 / self.n_embd)
+            * math.log(10000)
+        )
+        mat = torch.zeros(n_ctx, self.n_embd)
+        mat[:, ::2] = torch.sin(pos * div)
+        mat[:, 1::2] = torch.cos(pos * div)
+        self.mat = mat
+
+    def forward(self, x):
+        if len(x) > self.n_ctx:
+            self.initialize(len(x))
+        return self.mat[x]
+
 class BertEmbeddings(nn.Module):
     def __init__(self, config):
         super().__init__()
